@@ -72,6 +72,10 @@ def index():
 @app.route('/on.html')
 def on():
   return render_template('on.html')
+  
+@app.route('/arz.html')
+def amir():
+  return render_template('arz.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
