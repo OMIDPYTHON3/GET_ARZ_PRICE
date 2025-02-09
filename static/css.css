@@ -1,0 +1,99 @@
+body {
+  background-color: #1e1e1e; /* پس‌زمینه اصلی سایت */
+  color: #ffffff; /* رنگ متن سفید */
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; /* کارت‌ها به خط بعدی می‌روند اگر فضا کم باشد */
+  gap: 20px; /* فاصله بین کارت‌ها */
+  padding: 20px;
+  width: 100%;
+}
+
+img{
+  width: 20px;
+  height: auto;
+}
+
+.card {
+  background-color: #2c2c2c; /* پس‌زمینه تیره کارت */
+  color: #ffffff; /* رنگ متن سفید */
+  border-radius: 12px; /* گوشه‌های گرد */
+  padding: 15px;
+  flex: 1 1 150px; /* کارت‌ها با حداقل عرض 150px و متناسب با فضا تغییر می‌کنند */
+  max-width: 200px; /* حداکثر عرض کارت‌ها */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.05); /* افکت بزرگ شدن کارت */
+  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8); /* سایه نئونی هنگام هاور */
+}
+
+.card .title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6); /* سایه به متن عنوان */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px; /* فاصله بین آیکون و عنوان */
+}
+
+.card .price {
+  font-size: 20px;
+  font-weight: bold;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6); /* سایه به متن قیمت */
+}
+
+/* رنگ‌های اختصاصی برای هر ارز */
+.card.btc {
+  background-color: #f9a825; /* بیتکوین */
+  box-shadow: 0 0 8px 2px rgba(249, 168, 37, 0.8); /* حاشیه نئونی بیتکوین */
+}
+
+.card.trx {
+  background-color: #ff6f61; /* ترون */
+  box-shadow: 0 0 8px 2px rgba(255, 111, 97, 0.8); /* حاشیه نئونی ترون */
+}
+
+.card.ton {
+  background-color: #4285f4; /* تون‌کوین */
+  box-shadow: 0 0 8px 2px rgba(66, 133, 244, 0.8); /* حاشیه نئونی تون‌کوین */
+}
+
+.card.tether {
+  background-color: #00b89e; /* تتر */
+  box-shadow: 0 0 8px 2px rgba(0, 184, 158, 0.8); /* حاشیه نئونی تتر */
+}
+
+.card.gold {
+  background-color: #ffcc00; /* طلا */
+  box-shadow: 0 0 8px 2px rgba(255, 204, 0, 0.8); /* حاشیه نئونی طلا */
+}
+
+/* تنظیمات ریسپانسیو */
+@media (max-width: 768px) {
+  .card {
+    flex: 1 1 45%; /* کارت‌ها در صفحه‌های کوچکتر می‌توانند 45% از عرض را بگیرند */
+    max-width: 45%;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* نمایش کارت‌ها در دو ستون */
+    gap: 20px; /* فاصله بین کارت‌ها */
+  }
+
+  .card {
+    flex: 1 1 100%; /* کارت‌ها در صفحه موبایل 100% از عرض را می‌گیرند */
+    max-width: 100%;
+  }
+}
