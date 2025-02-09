@@ -64,8 +64,10 @@ def index():
     time.sleep(0.01)
     TRX = getprice('TRX')
     time.sleep(0.01)
+    GOLDUSD = getprice('XAUt')
+    time.sleep(0.01)
     GOLD=getgold()
-    return render_template('index.html',BTC=BTC,TRX=TRX,TON=TON,tether=tether,GOLD=GOLD)
+    return render_template('index.html',BTC=BTC,TRX=TRX,TON=TON,tether=tether,GOLD=GOLD,GOLDUSD=GOLDUSD)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
