@@ -69,7 +69,7 @@ def index():
     GOLD=getgold()
     return render_template('index.html',BTC=BTC,TRX=TRX,TON=TON,tether=tether,GOLD=GOLD,GOLDUSD=GOLDUSD)
     
-@app.route('on.html')
+@app.route('/on.html')
 def on():
   return render_template('on.html')
 
