@@ -14,13 +14,10 @@ def getgold():
     # پارس کردن محتوای HTML
     soup = BeautifulSoup(response.content, "html.parser")
     
-    # جستجو برای ایمیل و شماره تلفن
-    contact_info = soup.find("a", href=lambda href: href and ("mailto:" in href or "tel:" in href))
+    # جستجو برای قیمت طلا
+    gold_price = soup.find("li", class_="contact ml-0").find("span", class_="text-bold").text.strip()
     
-    if contact_info:
-        return contact_info.text.strip()
-    return "Contact information not found"
-
+    return gold_price
 
 def gettet():
   api = requests.get('https://api.nobitex.ir/v3/orderbook/USDTIRT')
