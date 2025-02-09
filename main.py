@@ -4,8 +4,8 @@ from bs4 import BeautifulSoup
 import time
 app = Flask(__name__)
 
-def getgold():
-    url = "https://www.tala.ir/webservice/price_live.php"
+def get_contact_info():
+    url = "https://saatchico.com/contact"
     
     # ارسال درخواست به سایت
     response = requests.get(url)
@@ -14,11 +14,12 @@ def getgold():
     # پارس کردن محتوای HTML
     soup = BeautifulSoup(response.content, "html.parser")
     
-    # جستجو برای قیمت طلا با استفاده از ID
-    gold_price = soup.find("a", id="gold_18k").text.strip()
+    # جستجو برای ایمیل و شماره تلفن
+    contact_info = soup.find("a", href=lambda href: href and ("mailto:" in href or "tel:" in href))
     
-    return gold_price
-
+    if contact_info:
+        return contact_info.text.strip()
+    return "Contact information not found"
 
 
 def gettet():
