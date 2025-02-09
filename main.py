@@ -5,18 +5,19 @@ import time
 app = Flask(__name__)
 
 def getgold():
-  url = "https://saatchico.com/calculator#"
-  
-  # ارسال درخواست به سایت
-  response = requests.get(url)
-  
-  # پارس کردن محتوای HTML
-  soup = BeautifulSoup(response.content, "html.parser")
-  
-  # جستجو برای قیمت طلا با استفاده از کلاس text-bold
-  gold_price = soup.find("span", class_="text-bold").text
-  
-  return gold_price
+    url = "https://www.tala.ir/webservice/price_live.php"
+    
+    # ارسال درخواست به سایت
+    response = requests.get(url)
+    response.encoding = "utf-8"  # تنظیم صحیح کدگذاری
+    
+    # پارس کردن محتوای HTML
+    soup = BeautifulSoup(response.content, "html.parser")
+    
+    # جستجو برای قیمت طلا با استفاده از ID
+    gold_price = soup.find("a", id="gold_18k").text.strip()
+    
+    return gold_price
 
 
 
