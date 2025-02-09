@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import time
 app = Flask(__name__)
 
-def get_contact_info():
+def getgold():
     url = "https://saatchico.com/contact"
     
     # ارسال درخواست به سایت
