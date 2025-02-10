@@ -7,14 +7,11 @@ app = Flask(__name__)
 def getgold():
     url = "https://saatchico.com/contact"
     
-    # ارسال درخواست به سایت
     response = requests.get(url)
-    response.encoding = "utf-8"  # تنظیم صحیح کدگذاری
+    response.encoding = "utf-8"
     
-    # پارس کردن محتوای HTML
     soup = BeautifulSoup(response.content, "html.parser")
     
-    # جستجو برای قیمت طلا
     gold_price = soup.find("li", class_="contact ml-0").find("span", class_="text-bold").text.strip()
     
     return gold_price
