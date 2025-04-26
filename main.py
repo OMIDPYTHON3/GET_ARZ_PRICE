@@ -68,7 +68,11 @@ def index():
 @app.route('/on.html')
 def on():
   return render_template('on.html')
-  
+
+@app.route('/ping.html')
+def on():
+  return render_template('ping.html')
+
 @app.route('/arz.html')
 def amir():
   return render_template('arz.html')

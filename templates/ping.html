@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real Ping Test</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .output div {
+      margin: 5px 0;
+      font-size: 16px;
+    }
+    input {
+      padding: 5px;
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1 class="my-4 text-center">Real Ping Test (via Image)</h1>
+
+  <div class="row mb-3">
+    <label for="rate" class="col-sm-2 col-form-label">Requests per second (Rate):</label>
+    <div class="col-sm-10">
+      <input type="number" id="rate" class="form-control" value="10" min="1" max="100">
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <label for="time" class="col-sm-2 col-form-label">Duration (seconds):</label>
+    <div class="col-sm-10">
+      <input type="number" id="time" class="form-control" value="10" min="1" max="60">
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <label for="packetSize" class="col-sm-2 col-form-label">Packet Size (bytes):</label>
+    <div class="col-sm-10">
+      <input type="number" id="packetSize" class="form-control" value="32" min="1" max="1500">
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <label for="url" class="col-sm-2 col-form-label">Ping URL:</label>
+    <div class="col-sm-10">
+      <input type="text" id="url" class="form-control" value="https://cp.cloudflare.com/" placeholder="Enter URL to ping">
+    </div>
+  </div>
+
+  <div class="text-center">
+    <button onclick="startPing()" class="btn btn-outline-success">Start Ping Test</button>
+  </div>
+
+  <div class="output mt-4">
+    <div id="rateOutput" class="alert alert-info alert-primary">Rate: Waiting...</div>
+    <div id="pingOutput" class="alert alert-success">Ping: Waiting...</div>
+    <div id="jitterOutput" class="alert alert-warning">Jitter: Waiting...</div>
+    <div id="lossOutput" class="alert alert-danger">Loss: Waiting...</div>
+    <div id="packetSizeOutput" class="alert alert-dark">Packet Size: Waiting...</div>
+  </div>
+</div>
+
+<script>
+let totalRequests = 0;
+let completedRequests = 0;
+let lostPings = 0;
+let lastPings = [];
+
+function startPing() {
+    const url = document.getElementById('url').value || 'https://cp.cloudflare.com/'; // استفاده از URL وارد شده
+    const rate = parseInt(document.getElementById('rate').value) || 10;
+    const time = parseInt(document.getElementById('time').value) || 10;
+    const packetSize = parseInt(document.getElementById('packetSize').value) || 32; // سایز پکت
+
+    totalRequests = rate * time;
+    completedRequests = 0;
+    lostPings = 0;
+    lastPings = [];
+
+    updateDisplay(rate, 0, 0, 0, packetSize);
+
+    const interval = setInterval(() => {
+        if (completedRequests >= totalRequests) {
+            clearInterval(interval);
+            calculateAndDisplayResults(packetSize);
+            return;
+        }
+
+        const img = new Image();
+        const start = performance.now();
+
+        img.onload = img.onerror = function() {
+            const ping = performance.now() - start;
+            if (ping < 10000) { // اگر بیش از حد طول نکشید
+                lastPings.push(ping);
+            } else {
+                lostPings++;
+            }
+            completedRequests++;
+            updateDisplay(rate, ping, calculateJitter(), calculatePacketLoss(), packetSize);
+        };
+
+        // جلوگیری از کش شدن عکس و تنظیم سایز پکت
+        img.src = `${url}?size=${packetSize}&cache=` + Math.random();
+    }, 1000 / rate);
+}
+
+function updateDisplay(rate, ping, jitter, loss, packetSize) {
+    // به جای پینگ آخر، میانگین نشون بده
+    const avgPing = lastPings.reduce((a, b) => a + b, 0) / lastPings.length || 0;
+    
+    document.getElementById('rateOutput').innerText = `Rate: ${rate}/second`;
+    document.getElementById('pingOutput').innerText = `Ping (avg): ${avgPing.toFixed(2)}ms`;
+    document.getElementById('jitterOutput').innerText = `Jitter: ${jitter.toFixed(2)}ms`;
+    document.getElementById('lossOutput').innerText = `Loss: ${loss.toFixed(2)}%`;
+    document.getElementById('packetSizeOutput').innerText = `Packet Size: ${packetSize} bytes`; // نمایش سایز پکت
+}
+
+function calculateJitter() {
+    if (lastPings.length < 2) return 0;
+    let sumDiff = 0;
+    for (let i = 1; i < lastPings.length; i++) {
+        sumDiff += Math.abs(lastPings[i] - lastPings[i - 1]);
+    }
+    return sumDiff / (lastPings.length - 1);
+}
+
+function calculatePacketLoss() {
+    return (lostPings / totalRequests) * 100;
+}
+
+function calculateAndDisplayResults(packetSize) {
+    const rate = parseInt(document.getElementById('rate').value) || 10;
+    const finalPing = lastPings[lastPings.length - 1] || 0;
+    updateDisplay(rate, finalPing, calculateJitter(), calculatePacketLoss(), packetSize);
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
