@@ -70,7 +70,7 @@ def on():
   return render_template('on.html')
 
 @app.route('/ping.html')
-def on():
+def ping():
   return render_template('ping.html')
 
 @app.route('/arz.html')
